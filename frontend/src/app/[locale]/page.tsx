@@ -11,7 +11,7 @@ import StoreRatingBadge from "@/components/reviews/StoreRatingBadge";
 export default async function HomePage() {
   const [offers, storeRating] = await Promise.all([
     getActiveOffers().catch(() => []),
-    getStoreRating().catch(() => null),
+    getStoreRating().catch(() => undefined),
   ]);
 
   return (

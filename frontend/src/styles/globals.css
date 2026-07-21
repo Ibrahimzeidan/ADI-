@@ -1,0 +1,41 @@
+/* Tailwind v4 uses @import instead of @tailwind directives */
+@import "tailwindcss";
+
+/*
+  @theme tells Tailwind to create utility classes from these CSS variables.
+
+  FONTS: --font-sans / --font-serif → font-sans / font-serif utilities
+  COLORS: --color-brand-* → bg-brand-*, text-brand-*, border-brand-* utilities
+    e.g. bg-brand-primary, text-brand-secondary, border-brand-accent, bg-brand-primary/10
+
+  Brand colors sampled from the ADI logo:
+    primary   = orange/red "A"  — main buttons, key accents
+    secondary = gold/yellow "D" — hover states, secondary highlights
+    accent    = teal shape      — used sparingly on badges and small accents
+    dark      = near-black logo backdrop — navbar, footer, hero background
+    light     = warm off-white  — light section backgrounds
+*/
+@theme {
+  --font-sans:   var(--font-inter), Arial, sans-serif;
+  --font-serif:  var(--font-playfair), Georgia, serif;
+  --font-arabic: var(--font-cairo), Arial, sans-serif;
+
+  --color-brand-primary:   #E8542A;
+  --color-brand-secondary: #F2A73B;
+  --color-brand-accent:    #2FBFA6;
+  --color-brand-dark:      #1A1A1A;
+  --color-brand-light:     #FFFDF9;
+}
+
+html { scroll-behavior: smooth; }
+
+body { @apply text-stone-800 bg-brand-light antialiased; }
+
+/* Switch to Arabic font when the html element has dir="rtl".
+   Cairo covers Arabic glyphs and Latin digits so prices render correctly. */
+html[dir="rtl"] body,
+html[dir="rtl"] input,
+html[dir="rtl"] textarea,
+html[dir="rtl"] button {
+  font-family: var(--font-cairo), Arial, sans-serif;
+}

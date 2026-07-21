@@ -1,0 +1,129 @@
+// Prisma schema — defines the database models for ADI Lebanon.
+// After editing this file, run: npx prisma db push
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// In Prisma 7, the connection URL is in prisma.config.ts (not here).
+datasource db {
+  provider = "postgresql"
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String
+  slug     String    @unique
+  imageUrl String?
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id            String      @id @default(cuid())
+  name          String
+  nameAr        String?
+  slug          String      @unique
+  description   String
+  descriptionAr String?
+  price         Float
+  imageUrl      String?
+  categoryId    String
+  category      Category    @relation(fields: [categoryId], references: [id])
+  createdAt     DateTime    @default(now())
+  favorites     Favorite[]
+  orderItems    OrderItem[]
+  reviews       Review[]
+
+  @@index([name])
+  @@map("products")
+}
+
+// Profile stores user details. `id` is the Supabase Auth UUID —
+// Supabase manages sign-up/sign-in/passwords in auth.users; we only store
+// extra profile fields here, linked by the same UUID.
+model Profile {
+  id        String     @id
+  fullName  String
+  phone     String?
+  address   String?
+  photoUrl  String?
+  role      String     @default("customer")
+  createdAt DateTime   @default(now())
+  favorites Favorite[]
+  orders    Order[]
+  reviews   Review[]
+
+  @@map("profiles")
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String?
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  user      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@map("reviews")
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+  user      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("favorites")
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  userId          String
+  status          String      @default("pending")
+  totalPrice      Float
+  deliveryAddress String
+  paymentMethod   String
+  createdAt       DateTime    @default(now())
+  user            Profile     @relation(fields: [userId], references: [id])
+  items           OrderItem[]
+
+  @@map("orders")
+}
+
+model Offer {
+  id            String      @id @default(cuid())
+  title         String
+  titleAr       String?
+  description   String
+  descriptionAr String?
+  imageUrl      String?
+  originalPrice Float
+  offerPrice    Float
+  isActive      Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  orderItems    OrderItem[]
+
+  @@map("offers")
+}
+
+model OrderItem {
+  id              String   @id @default(cuid())
+  orderId         String
+  productId       String?
+  offerId         String?
+  quantity        Int
+  priceAtPurchase Float
+  order           Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product         Product? @relation(fields: [productId], references: [id])
+  offer           Offer?   @relation(fields: [offerId], references: [id])
+
+  @@map("order_items")
+}

@@ -18,7 +18,21 @@ export default async function ProfilePage() {
 
   if (!data.user) redirect(`/${locale}`);
 
-  const profile = await prisma.profile.findUnique({ where: { id: data.user.id } }).catch(() => null);
+  let profile = await prisma.profile.findUnique({ where: { id: data.user.id } }).catch(() => null);
+
+  // User exists in Supabase Auth but has no profile row — create one now.
+  // This happens when someone signed up before the database was set up.
+  if (!profile) {
+    const fallbackName = data.user.user_metadata?.full_name
+      || data.user.email?.split("@")[0]
+      || "User";
+    profile = await prisma.profile.upsert({
+      where: { id: data.user.id },
+      create: { id: data.user.id, fullName: fallbackName },
+      update: {},
+    }).catch(() => null);
+  }
+
   if (!profile) redirect(`/${locale}`);
 
   const favCount = await prisma.favorite.count({ where: { userId: data.user.id } }).catch(() => 0);

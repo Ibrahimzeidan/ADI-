@@ -20,7 +20,7 @@ export default async function ProductPage({ params }: Props) {
 
   if (!product) notFound();
 
-  const rating = await getProductRating(product.id).catch(() => null);
+  const rating = await getProductRating(product.id).catch(() => undefined);
 
   return (
     <div className="min-h-screen bg-brand-light pt-24">

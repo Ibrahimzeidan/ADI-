@@ -18,8 +18,8 @@ export async function generateMetadata({ params }: Props) {
 export default async function CategoryProductsPage({ params }: Props) {
   const { slug } = await params;
   const [category, products, t] = await Promise.all([
-    getCategoryBySlug(slug),
-    getProductsByCategory(slug),
+    getCategoryBySlug(slug).catch(() => null),
+    getProductsByCategory(slug).catch(() => []),
     getTranslations("categories"),
   ]);
 

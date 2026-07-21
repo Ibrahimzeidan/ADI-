@@ -13,7 +13,7 @@ export default async function OrdersPage() {
   if (!data.user) redirect(`/${locale}`);
 
   const [orders, t] = await Promise.all([
-    getUserOrders(data.user.id),
+    getUserOrders(data.user.id).catch(() => []),
     getTranslations("profile"),
   ]);
 

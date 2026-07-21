@@ -5,7 +5,7 @@ import OfferCard from "@/components/offers/OfferCard";
 
 export default async function OffersPage() {
   const [offers, t] = await Promise.all([
-    getActiveOffers(),
+    getActiveOffers().catch(() => []),
     getTranslations("offers"),
   ]);
 

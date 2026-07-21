@@ -13,7 +13,7 @@ export default async function FavoritesPage() {
   if (!data.user) redirect(`/${locale}`);
 
   const [favorites, t] = await Promise.all([
-    getFavorites(data.user.id),
+    getFavorites(data.user.id).catch(() => []),
     getTranslations("favorites"),
   ]);
 

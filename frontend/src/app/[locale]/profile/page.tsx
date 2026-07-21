@@ -18,10 +18,10 @@ export default async function ProfilePage() {
 
   if (!data.user) redirect(`/${locale}`);
 
-  const profile = await prisma.profile.findUnique({ where: { id: data.user.id } });
+  const profile = await prisma.profile.findUnique({ where: { id: data.user.id } }).catch(() => null);
   if (!profile) redirect(`/${locale}`);
 
-  const favCount = await prisma.favorite.count({ where: { userId: data.user.id } });
+  const favCount = await prisma.favorite.count({ where: { userId: data.user.id } }).catch(() => 0);
 
   return (
     <div className="min-h-screen pt-20 relative">

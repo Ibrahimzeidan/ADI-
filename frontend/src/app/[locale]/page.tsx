@@ -9,7 +9,10 @@ import ContactSection from "@/components/sections/ContactSection";
 import StoreRatingBadge from "@/components/reviews/StoreRatingBadge";
 
 export default async function HomePage() {
-  const [offers, storeRating] = await Promise.all([getActiveOffers(), getStoreRating()]);
+  const [offers, storeRating] = await Promise.all([
+    getActiveOffers().catch(() => []),
+    getStoreRating().catch(() => null),
+  ]);
 
   return (
     <>

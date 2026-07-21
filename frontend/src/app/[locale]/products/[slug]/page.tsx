@@ -16,11 +16,11 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const product = await getProductBySlug(slug);
+  const product = await getProductBySlug(slug).catch(() => null);
 
   if (!product) notFound();
 
-  const rating = await getProductRating(product.id);
+  const rating = await getProductRating(product.id).catch(() => null);
 
   return (
     <div className="min-h-screen bg-brand-light pt-24">

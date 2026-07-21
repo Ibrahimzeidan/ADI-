@@ -6,7 +6,7 @@ import CategoryGrid from "@/components/products/CategoryGrid";
 export const dynamic = "force-dynamic";
 
 export default async function CategoriesPage() {
-  const [categories, t] = await Promise.all([getAllCategories(), getTranslations("categories")]);
+  const [categories, t] = await Promise.all([getAllCategories().catch(() => []), getTranslations("categories")]);
 
   return (
     <div className="min-h-screen bg-brand-light pt-24 pb-16 px-4 sm:px-6">

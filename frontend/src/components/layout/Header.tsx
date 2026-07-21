@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import NavLinks from "./NavLinks";
@@ -27,8 +26,9 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
-            <Image src="/images/adi-logo.png" alt="ADI Lebanon logo" width={120} height={40}
-              className="h-8 md:h-10 w-auto object-contain" priority />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/images/adi-logo.png" alt="ADI Lebanon logo"
+              className="h-8 md:h-10 w-auto object-contain" />
             <span className="font-serif text-xl font-bold text-brand-secondary group-hover:text-brand-secondary/80 transition-colors">
               ADI Lebanon
             </span>

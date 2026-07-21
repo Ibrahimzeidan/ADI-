@@ -6,10 +6,6 @@ import { routing } from "./i18n/routing";
 export default createMiddleware(routing);
 
 export const config = {
-  matcher: [
-    "/",
-    "/(en|ar)/:path*",
-    // Match all paths except Next internals, static files, and /admin routes
-    "/((?!api|admin|_next|_vercel|\\.(?:ico|png|jpg|jpeg|svg|webp|woff2?|css|js)).*)",
-  ],
+  // Exclude: api, admin, Next.js internals, and any path with a dot (static files)
+  matcher: ["/((?!api|admin|_next|_vercel|.*\\..*).*)" ],
 };
